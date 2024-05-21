@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>roboter system 24</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>       
+        <p> 
+        <img src="logo">
+        </p>
+        <p>
+        <h3>Elektronik und Technische Informatik</h3>
+        </p>
+        <p> 
+        <div class="topnav">
+            <h1>roboter system 24</h1>
+        </div>
+        </p>          
+        <p> 
+            <button class="button-on" id="bON">ON!</button>
+            <button class="button-off" id="bOFF">OFF!</button>
+        </p>
+        <p class="state">Led: <span id="state">%STATE%</span></p>
+        <p class="battery">Battery: <span id="battery">%BATTERY%</span> V</p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="300" height="20" style="border:1px solid black">
+            <rect id="batteryGreen" x="0" y="0" width="300" height="20" fill="#00ff00"/>
+        </svg>
+        <p class="switch">
+            <input type="range" oninput="updateSliderPWM(this)" 
+            id="pwmSSL" min="0" max="255" step="1" value="0" class="slider">
+        </p>
+        <p class="state"> Value Left: <span id="textSliderValueLeft"></span>.</p>
+
+        <p class="switch">
+            <input type="range" onchange="updateSliderPWM(this)" 
+            id="pwmSSR" min="0" max="255" step="1" value="0" class="slider">
+        </p>
+        <p class="state"> Value Right: <span id="textSliderValueRight"></span>.</p>
+
+        <script src="script.js"></script>
+    </body>
+</html>
+

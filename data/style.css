@@ -1,0 +1,28 @@
+html 
+{
+    font-family: Verdana; 
+    text-align: center;
+}
+
+h1 
+{
+    font-size: 1.8rem; 
+    color: #ffffff;  
+}
+
+.topnav
+{
+    overflow: hidden;
+    background-color: #0A1128;  
+}
+
+body
+{
+    margin:0;
+}
+
+.content 
+{
+    padding: 50px;
+}
+
