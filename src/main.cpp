@@ -79,6 +79,10 @@ String sliderValueLeft  = "0";
 String sliderValueRight = "0";  
 volatile float batteryLevel = 0.;
 
+const uint8_t impulsL = 14;
+const uint8_t impulsR = 27;
+
+
 // Adafruit_MPU6050 mpu;
 
 // prototypes ######################################################
@@ -89,8 +93,6 @@ String createJasonLetter(String i, String v);
 void impuls_R_isr(void);
 void impuls_L_isr(void);
 
-//    attachInterrupt(digitalPinToInterrupt(impulsR), impuls_R_isr, FALLING);
-//    attachInterrupt(digitalPinToInterrupt(impulsL), impuls_L_isr, FALLING);
 
 //  MPU6050:
 //#    Wire.begin(SDA, SCL);
@@ -300,7 +302,12 @@ void setup()
     timerAttachInterrupt(timer, myTimer, true);
     timerAlarmWrite(timer, 100, true);  // 0.1 msec
     timerAlarmEnable(timer);
-    
+
+    attachInterrupt(digitalPinToInterrupt(impulsR), impuls_R_isr, FALLING);
+    attachInterrupt(digitalPinToInterrupt(impulsL), impuls_L_isr, FALLING);
+
+
+
     oneSecFlag = qSecFlag = tenMSecFlag = FALSE; 
 
     pinMode(ON_BOARD_LED, OUTPUT);
@@ -475,7 +482,22 @@ void loop()
 
         distance = pulseIn(ECHO_PIN, HIGH);   // durch 58.23 
 
-        printf("distance : %d\n", (int)(distance/58.23));
+        // printf("distance : %d\n", (int)(distance/58.23));
+
+
+        if ((int)(distance/58.23) < 12)
+        {
+            leds[2] = CRGB{255, 0, 255};
+            leds[3] = CRGB{255, 0, 255};
+        }
+        else
+        {
+            leds[2] = CRGB{255, 255, 255};
+            leds[3] = CRGB{255, 255, 255};
+        }
+
+        FastLED.show();
+ 
 
 
     }
@@ -493,11 +515,13 @@ void impuls_L_isr(void);
 
 void impuls_R_isr(void)
 {
-  
+    leds[1] = CRGB{255, 0, 0};
+ 
 }
 
 void impuls_L_isr(void)
 {
+    leds[1] = CRGB{0, 255, 0};
   
 }
 
