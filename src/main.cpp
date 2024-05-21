@@ -79,9 +79,7 @@ String sliderValueLeft  = "0";
 String sliderValueRight = "0";  
 volatile float batteryLevel = 0.;
 
-
-
-//  brauchen wir nicht ... MPU6050 mpu6050(Wire);
+// Adafruit_MPU6050 mpu;
 
 // prototypes ######################################################
 
@@ -331,7 +329,7 @@ void setup()
 
     testPin = digitalRead(TEST_PIN_RX2);
 
-    if (testPin == LOW)
+    if (testPin == HIGH)
     {
         leds[0] = CRGB{0, 0, 255}; // R B G
         leds[1] = CRGB{255, 255, 255};
@@ -371,6 +369,30 @@ void setup()
 
 
     FastLED.show();
+
+// Gyrosensor:
+
+ //mpu.begin();
+ /*if (!mpu.begin()) {
+    Serial.println("Failed to find MPU6050 chip");
+    while (1) {
+      delay(10);
+    }
+  }*/
+  Serial.println("MPU6050 Found!");
+
+  //setupt motion detection
+  /*
+  mpu.setHighPassFilter(MPU6050_HIGHPASS_0_63_HZ);
+  mpu.setMotionDetectionThreshold(1);
+  mpu.setMotionDetectionDuration(20);
+  mpu.setInterruptPinLatch(true);	// Keep it latched.  Will turn off when reinitialized.
+  mpu.setInterruptPinPolarity(true);
+  mpu.setMotionInterrupt(true);
+  */
+
+
+
 
   
     LDir = 0; 
