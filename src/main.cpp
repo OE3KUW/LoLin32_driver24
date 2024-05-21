@@ -1,6 +1,6 @@
 /******************************************************************
-                       LoLin32 distance FastLED
-                                                     қuran may 2024
+                       LoLin32 driver 24
+                                                    қuran june 2024
 ******************************************************************/
 #include <Arduino.h>
 #include <stdio.h>
@@ -12,6 +12,8 @@
 #include "soc/soc.h"                   
 #include "soc/rtc_cntl_reg.h"          
 #include <Arduino_JSON.h>    
+#include <Adafruit_MPU6050.h>           // durch lib mit dabei  siehe platformio.ini
+#include <Adafruit_Sensor.h>            // durch lib mit dabei
 #include <Wire.h>
 //#define FASTLED_ALL_PINS_HARDWARE_SPI
 #include <FastLED.h>          
@@ -77,10 +79,46 @@ String sliderValueLeft  = "0";
 String sliderValueRight = "0";  
 volatile float batteryLevel = 0.;
 
+
+
+//  brauchen wir nicht ... MPU6050 mpu6050(Wire);
+
 // prototypes ######################################################
 
 int32_t smoothLevel(int32_t x);
 String createJasonLetter(String i, String v); 
+
+void impuls_R_isr(void);
+void impuls_L_isr(void);
+
+//    attachInterrupt(digitalPinToInterrupt(impulsR), impuls_R_isr, FALLING);
+//    attachInterrupt(digitalPinToInterrupt(impulsL), impuls_L_isr, FALLING);
+
+//  MPU6050:
+//#    Wire.begin(SDA, SCL);
+//#    mpu6050.begin();
+//#    mpu6050.calcGyroOffsets(true);
+
+// Magnetic field:
+/*
+
+#define SDA   21
+#define SCL   22
+#define addr 0x0D    // magnetic field sensor
+
+    Wire.begin(SDA, SCL);
+    Wire.beginTransmission(addr);
+    Wire.write(0x0B);
+    Wire.write(0x01);
+    Wire.endTransmission();
+    Wire.beginTransmission(addr);
+    Wire.write(0x09);
+    Wire.write(0x1D);
+    Wire.endTransmission();
+
+aus dem driver von 2019 ....
+
+*/
 
 void initSPIFFS()
 {
@@ -427,6 +465,31 @@ void loop()
 
 }    
 
+void impuls_R_isr(void);
+void impuls_L_isr(void);
+
+
+void impuls_R_isr(void)
+{
+  
+}
+
+void impuls_L_isr(void)
+{
+  
+}
+
+//****************************************************************
+// MPU6050 gyrometer:
+//****************************************************************
+//int getAngle(void)
+//{
+//    mpu6050.update();
+//    return mpu6050.getAngleX();
+//}
+
+
+
 // Timer Interrupt: ################################################
 // periodic timer interrupt, expires each 0.1 msec
 
@@ -466,3 +529,75 @@ void IRAM_ATTR myTimer(void)
     if (ramp >= vR) digitalWrite(WHEEL_R, LOW);  else digitalWrite(WHEEL_R, HIGH);
 
 }
+
+/*
+
+
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
+#include <Wire.h>
+
+Adafruit_MPU6050 mpu;
+
+void setup(void) {
+  Serial.begin(115200);
+  while (!Serial)
+    delay(10); // will pause Zero, Leonardo, etc until serial console opens
+
+  Serial.println("Adafruit MPU6050 test!");
+
+  // Try to initialize!
+  if (!mpu.begin()) {
+    Serial.println("Failed to find MPU6050 chip");
+    while (1) {
+      delay(10);
+    }
+  }
+  Serial.println("MPU6050 Found!");
+
+  //setupt motion detection
+  mpu.setHighPassFilter(MPU6050_HIGHPASS_0_63_HZ);
+  mpu.setMotionDetectionThreshold(1);
+  mpu.setMotionDetectionDuration(20);
+  mpu.setInterruptPinLatch(true);	// Keep it latched.  Will turn off when reinitialized.
+  mpu.setInterruptPinPolarity(true);
+  mpu.setMotionInterrupt(true);
+
+  Serial.println("");
+  delay(100);
+}
+
+void loop() {
+
+  if(mpu.getMotionInterruptStatus()) {
+    /* Get new sensor events with the readings */
+/*
+    sensors_event_t a, g, temp;
+    mpu.getEvent(&a, &g, &temp);
+
+    /* Print out the values * /
+    Serial.print("AccelX:");
+    Serial.print(a.acceleration.x);
+    Serial.print(",");
+    Serial.print("AccelY:");
+    Serial.print(a.acceleration.y);
+    Serial.print(",");
+    Serial.print("AccelZ:");
+    Serial.print(a.acceleration.z);
+    Serial.print(", ");
+    Serial.print("GyroX:");
+    Serial.print(g.gyro.x);
+    Serial.print(",");
+    Serial.print("GyroY:");
+    Serial.print(g.gyro.y);
+    Serial.print(",");
+    Serial.print("GyroZ:");
+    Serial.print(g.gyro.z);
+    Serial.println("");
+  }
+
+  delay(10);
+}
+
+
+*/
